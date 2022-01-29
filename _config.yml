@@ -1,3 +1,5 @@
 name: Ruohan Liu's webpage
 # theme: jekyll-theme-cayman
 title: false
+
+theme: jekyll-theme-leap-day

@@ -74,7 +74,7 @@
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
 
-                            <img class="img-fluid" src="assets/img/portfolio/cabin.png" alt="..." />
+                            <img class="img-fluid" src="assets/img/lab1cover.png" alt="..." />
 
                             <h3 class=" text-center  mb-0">Lab1 : Artemis</h3>
                             
@@ -357,17 +357,91 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Log Cabin</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab1:The Artemis board</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
                                         <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                                         <div class="divider-custom-line"></div>
                                     </div>
+                                    <h3 class=" text-center  mb-0">Blink it up</h3>
+                                    <p class="mb-4">I use PWM to control the duty of LED. In loop function, the duty of LED is changed every 10 rounds.</p>
+                                    <code >if (cnt == 10){cnt  =  0;}<br>
+                                        if (light_on) {duty++;}<br>
+                                        else {duty--;}}  <br>
+                                      if (duty == 10) {light_on = 0;}<br>
+                                      if (!duty) {light_on = 1;}<br>
+                                      cnt++;<br>
+                                      digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)<br>
+                                      delay(duty);                       // wait for duty/1000 second<br>
+                                      digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW<br>
+                                      delay(10-duty);                    // wait for (10-duty)/1000 second
+                                  </code>
+                                    <div style="text-align: center;">
+                                        <video width="400" height="375" class="fullscreen-video" controls="">
+                                            <source class="text-center" src="assets/video/lab1/blinkItUp.mp4" type="video/mp4">
+                                        </video>
+                                    </div>
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <h3 class=" text-center  mb-0">Serial</h3>
+                                    <p class="mb-4">Setup function: define the pin for UART and baud rate <br>
+                                        Loop function: read the data from UART port and send to it.</p>
+                                    <div style="text-align: center;">
+                                        <video width="400" height="375" class="fullscreen-video" controls="">
+                                            <source class="text-center" src="assets/video/lab1/serial.mp4" type="video/mp4">
+                                        </video>
+                                    </div>
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <h3 class=" text-center  mb-0">Analog Read</h3>
+                                    <p class="mb-4">First initialize ADC pin for temperature detection and UART port for data transmission.<br>
+                                        Then loop function reads the temperature from ADC pin, send to UART port and repeat over and over again.</p>
+                                    <div style="text-align: center;">
+                                        <video width="400" height="375" class="fullscreen-video" controls="">
+                                            <source class="text-center" src="assets/video/lab1/analogRead.mp4" type="video/mp4">
+                                        </video>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <video width="400" height="375" class="fullscreen-video" controls="">
+                                            <source class="text-center" src="assets/video/lab1/analogRead_PC.mp4" type="video/mp4">
+                                        </video>
+                                    </div>
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <h3 class=" text-center  mb-0">MicrophoneOutput</h3>
+                                    <p class="mb-4">1.	Initialize UART and start PDM interrupts. <br>
+                                        2.	Get audio data from pdmDataBuffer.<br>
+                                        3.	Perform FFT on audio data.<br>
+                                        4.	Output the loudest frequency.<br>
+                                        </p>
+                                    <div style="text-align: center;">
+                                        <video width="400" height="375" class="fullscreen-video" controls="">
+                                            <source class="text-center" src="assets/video/lab1/MicrophoneOutput.mp4" type="video/mp4">
+                                        </video>
+                                    </div>
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <h3 class=" text-center  mb-0">Turn on the LED when you whistle</h3>
+                                    <p class="mb-4">1.	Initialize UART and LEDPIN and start PDM interrupts. <br>
+                                        2.	Get audio data from pdmDataBuffer.<br>
+                                        3.	If the sum of audio data is above the threshold, set LED on, otherwise off.<br>                                     
+                                        </p>
+                                    <div style="text-align: center;">
+                                        <video width="400" height="375" class="fullscreen-video" controls="">
+                                            <source class="text-center" src="assets/video/lab1/whistle.mp4" type="video/mp4">
+                                        </video>
+                                    </div>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cabin.png" alt="..." />
+                                    <!-- <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cabin.png" alt="..." /> -->
                                     <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                    </div>
                                     <button class="btn btn-primary" href="#!" data-bs-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i>
                                         Close Window

@@ -592,30 +592,220 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                    <div class="modal-body text-center pb-5">
                         <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-8">
+                            <!-- <div class="row justify-content-center"> -->
+                                <div class="col-lg-40">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Circus Tent</h2>
-                                    <!-- Icon Divider-->
+                                    <h2 class="portfolio-modal-title text-secondary text-center text-uppercase mb-0">prelab</h2>
+                                    <h6 class="mb-4">Think about which connections you want to be detachable and which can be permanent.</h6>
+                                    <p class="mb-4">>I think all the connections between sensors and the Artemis should be detachable for cases when sensors are broken and I can still replace them.<br></p>
+                                    <h6 class="mb-4">Think about which side of the sensors you mount the wires from.</h6>
+                                    <p class="mb-4">>For ToF sensors, the wires should be connected from the back side of the infrared sensor chip, so it doesn't affect the distance detection.<br>
+                                        >For IMU, the wires should be connected from the back of the flat side so that the sensor can be aligned with the x-y plane of the robot frame.<br></p>
+                                    <h6 class="mb-4">Think about the placement of each sensor in the chassis and how long the wires have to be.</h6>
+                                    <p class="mb-4">>IMU should be placed on the origin of xy-plane of the robot frame and parallel to the xy-plane.<br>
+                                        >ToF sensors should be mounted on the front and rear of the car which enables the robot to detect the obtacles ahead and behind.</p>
+                                    <center><img src="assets/video/lab3/prelab.png" class="centerImage"/></center>
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
-                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                    </div>
+                                    <h2 class="portfolio-modal-title text-secondary text-center text-uppercase mb-0">Lab 3(a): Time of Flight Sensors<br></h2>
+                                    <h6 class="mb-4">1.Scan the I2C channel to find the sensor.</h6>
+                                    <p class="mb-4"></p>>I loaded and burned Exampe1_wire program into the Artmeis. And the address I got was 0x29 which matched my expectation.
+                                        Because I noticed the default I2C address of ToF was 0x52 from datasheet in prelab.0x52 in binary form is (01010010)B and 0x29 in binary form is (00101001)B.
+                                        So 0x29 was just the result of shifting the address 0x52 one bit to the right. And I also used "getI2CAdress" function from SparkFun_VL53L1X
+                                        libaray to get the address which was the default address 0x52.</p>
+                                    <center><img src="assets/video/lab3/a_1.png"  /></center>
+
+                                    <h6 class="mb-4">2.The ToF sensor has three modes, that optimize the ranging performance given the maximum expected range. 
+                                        Discuss the pros/cons of each mode, and think about which one could work on the final robot.</h6>
+                                    <p class="mb-4">>The VL53L1X has three distance modes: short, medium and long. Their maximum distances in dark are 136 cm, 290 cm, 300 cm respectively.
+                                        Using the short mode will enable the robot to get the most accurate distance in short-range dark environment but  will limit the "visual"
+                                        distance of the robot so that it cannot see farther obstacles and turn promptly. However, short mode provides the longest distance measurement
+                                        under strong ambient light (135cm) compared to the other two modes (76/73 cm). So, short mode works best in strong light environment. As for the 
+                                        medium mode and long mode, they both offer a longer detection range but behave badly under strong light. Since the longer the detecton range is, 
+                                        the longer it takes to measure, the medium mode is preferable in dark. To conclude, I think the short mode is most suitable for our robots under 
+                                        strong light and the medium mode is most suitable in dark and in normal environment.
+                                        </p>
+                                    
+                                    <h6 class="mb-4">3.Test the long mode.</h6>
+                                    <p class="mb-4">I tested the ToF from 100mm to 1300mm. It seems that the accuracy of ToF is still very high, the standard deviation of the error is 
+                                        relatively small, and it flatuated from 1.1 mm to 1.6 mm.
+                                    </p>
+                                    <center><img src="assets/video/lab3/ToFRangeAccuracy.png" width="800" /></center>
+
+                                    <h6 class="mb-4">4.Using notes from the pre-lab, hook up both ToF sensors simultaneously and demonstrate that both works.</h6>
+                                    <p class="mb-4">>In setup function, I use two extra GPIO pins to control two ToF sensors on and off. I first use pin 9 to turn on and initialize the front sensor and use pin 10 to shutdown the rear sensor.
+                                        Then I set the address of the front sensor to 0x10 and turn on and initialize the rear sensor. By doing so, ToF sensors get different I2C addresses.                                     
+                                    </p>
+                                    <code>  
+                                        pinMode(9, OUTPUT);<br>
+                                        pinMode(10, OUTPUT);<br><br>
+                                      
+                                        digitalWrite(9, HIGH);<br>
+                                        digitalWrite(10, LOW);<br>
+                                        if (frontSensor.begin() != 0) //Begin returns 0 on a good init<br>
+                                        {<br>
+                                          Serial.println("frontSensor failed to begin. Please check wiring. Freezing...");<br>
+                                          while (1);<br>
+                                        }<br>
+                                        Serial.println("frontSensor online!");<br>
+                                        frontSensor.setI2CAddress(0x10);<br><br>
+                                        digitalWrite(10,HIGH);<br>
+                                          if (RearSensor.begin() != 0) //Begin returns 0 on a good init<br>
+                                        {<br>
+                                          Serial.println("RearSensor failed to begin. Please check wiring. Freezing...");<br>
+                                          while (1);<br>
+                                        }<br>
+                                        Serial.println("RearSensor online!");<br>
+                                    </code>>
+                                    <p class="mb-4">
+                                        >The loop funcion lets both sensors start measurements.                                  
+                                    </p>
+                                    <code>
+                                        frontSensor.startRanging(); //Write configuration bytes to initiate measurement<br>
+                                        while (!frontSensor.checkForDataReady()) delay(0.1);<br><br>
+                                        
+                                        int frontDist = frontSensor.getDistance(); //Get the result of the measurement from the sensor<br>
+                                        frontSensor.clearInterrupt();<br>
+                                        frontSensor.stopRanging();<br><br>
+                                      
+                                        Serial.print("frontDistance(mm): ");<br>
+                                        Serial.print(frontDist);<br><br>
+                                      
+                                        RearSensor.startRanging(); //Write configuration bytes to initiate measurement<br>
+                                        while (!RearSensor.checkForDataReady()) delay(0.1);<br><br>
+                                        
+                                        int reartDist = RearSensor.getDistance(); //Get the result of the measurement from the sensor<br>
+                                        RearSensor.clearInterrupt();<br>
+                                        RearSensor.stopRanging();<br><br>
+                                      
+                                        Serial.print("\trearDistance(mm): ");<br>
+                                        Serial.print(reartDist);<br>
+                                      
+                                        Serial.println();<br>
+                                    </code>
+                                    <center><img src="assets/video/lab3/twoToF.gif"/></center><br>
+
+                                    <h6 class="mb-4"  text-center >Additional Tasks</h6>
+                                    <h6 class="mb-4">1. Many distance sensors are based on infrared trasmission. Discuss a couple, highlight the differences
+                                     in their fuctionality and the pros/cons of each.</h6>
+                                    <p>There are two types of infrared sensors: active and passive. Active infrared sensors are linear-controlled 
+                                        detectors, and their control range is a narrow and long space with a linear distribution. The active infrared sensor also
+                                        has the advantages of small size, light weight, low power consumption, easy operation and installation, and
+                                        low price. Since the lens surface of the optical system is exposed in the air, it is easily contaminated by dust
+                                        and other sundries. The passive infrared sensor itself does not emit any energy but passively receives and detects infrared radiation
+                                        from the environment. Once the human body infrared radiation comes in, the pyroelectric device will generate a sudden
+                                        change of electrical signal after being focused by the optical system, and an alarm will be issued. In the digital passive infrared
+                                        sensors, the weak electrical signal output by the pyroelectric sensor is directly input to a powerful microprocessor, and all signal 
+                                        conversion, amplification, filtering, etc. are carried out in a processing chip, thereby improving the passive infrared sensor's reliability.
+                                        Cons: When the equipment is not firmly installed, when the temperature difference between indoor and outdoor is large, or when multiple sensors 
+                                        transmit signals at the same time, it is easy to cause false alarms. 
+                                    </p>
+                                    
+                                    <h6 class="mb-4">2.Try out some settings of timing budgets, and discuss your choice of settings related to the anticipated speed of your robot. </h6>
+                                    <p>Accoarding to 2.5.2 in the datasheet, increasing the timing budget increases the maximum distance the device can range and improves the repeatability error. However, average consumption
+                                        augments accordingly. Since I choose the long mode, I want to make the range of ToF as large as possible, while
+                                        the time budget is small. 140 ms is the timing budget which allows the maximum distance of 4 m to reached under long distance mdoe.</p>
+                                    <center><img src="assets/video/lab3/mdaretb.png"/></center><br>
+                                    <p>Accoarding to this figure of maximum distance vs different timing budget from datasheet, I tried 140 ms timing budget and 200 ms under long distance.</p>
+                                    
+                                    <center><img src="assets/video/lab3/140long.gif"/></center><br>
+                                    <p>The above picture is the test result of setting the timing budget to 140ms in long mode. It can be seen that, its easurement time, internal measurement period and singal rate was 
+                                        around 96 ms, 100ms and 2500 respectively.</p>
+                                    <center><img src="assets/video/lab3/200long.gif"/></center><br>
+                                    <p>The above picture is the test result of setting the timing budget to 200ms in long mode. It can be seen that, its easurement time, internal measurement period and signal rate was 
+                                        180 ms, 100ms and 1000 respectively. <br>
+                                        Through the above tests, it can be seen that when both timimg budgets can achieve the same long-distance measurement, the tb of 140ms can obtain data updates with higher frequency
+                                        , and I also noticed that using the tb of 200ms is more prone to signal fail. So in the following experiments I will choose long mode and tb of 140 ms.</p>
+
+                                    <h6 class="mb-4">3. Try rapidly changing the distance from the sensor to an object and describe what happens. Consider how this will impact your motion implementation in future labs.</h6>
+                                    <p>I programmed the StatusandRate program to Artemis. After testing, I found that when the ToF distance measurement is relatively small (the obstacles ahead are relatively close), 
+                                    the measurement status is generally accurate, and the status is basically good.</p>
+                                    <center><img src="assets/video/lab3/short.gif"/></center><br>
+                                    <p>When the ToF distance measurement is relatively large (the obstacles ahead are relatively far), 
+                                        the measurement status is generally accurate, and the status is basically good.</p>
+                                    <center><img src="assets/video/lab3/long.gif"/></center><br>
+                                    <p>This result made me realize that using ToF When measuring distances, the measurement at close range is more reliable, and when the distance is farther, use ToF less.</p>
+                                    <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
                                     </div>
-                                    <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/circus.png" alt="..." />
-                                    <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
-                                    <button class="btn btn-primary" href="#!" data-bs-dismiss="modal">
-                                        <i class="fas fa-times fa-fw"></i>
-                                        Close Window
-                                    </button>
+                                    <h2 class="portfolio-modal-title text-secondary text-center text-uppercase mb-0">Lab 3(b):IMU<br></h2>
+                                    <h6 class="mb-4">1.Setup the IMU</h6>
+                                    <p>I connected the IMU to the Artmeis board using I2C wiring, ran Example1_Basics.<br>
+                                    AD0_VAL is the value of the last bit of the I2C address. On the Sparkfun 9DoF IMU breakout the default is 1, and when the ADR jumper is closed the value becomes 0.
+                                    When AD0_VAL equals 1, the Artmeis could not find IMU through I2C. When AD0_VAK equals 0, it worked.<br>
+                                    </p>
+                                    <p>
+                                        When IMU was placed on my table, it measured 0g on the x and y axes and +1g on the z axis. Here are the results of accelerometer when I rotated the IMU around the x and y axes.
+                                        But when I rotated the IMU around z axis, it was unable to distinguish between that and the acceleration provided through Earth's gravitational pull. This is because the 
+                                        accelerometer can only gauge the orientation of a stationary item with relation to Earth's surface. 
+                                    </p> 
+                                    <center><img src="assets/video/lab3/acctest.gif"/></center><br>
+                                    <p> Here are the results of gyroscope when I rotated the IMU around the x, y and z axes. The gyroscope worked well around these axes.</p>
+                                    <center><img src="assets/video/lab3/gyrotest.gif"/></center><br>
+
+                                    <h6 class="mb-4">2. Accelerometer</h6>
+                                    <h6 class="mb-4">2.1.  Use the equations from class to convert accelerometer data into pitch and roll.</h6>
+                                    <p>I used atan2 and M_PI to compute pitch and roll.</p>
+                                    <code>
+                                        float  rollRad = atan2(sensor->accY(), sensor->accZ()) ;<br>
+                                        float  rollDegree = rollRad * 180 / M_PI ;<br><br>
+
+                                        float  pitchRad = atan2(sensor->accX(), sensor->accZ());<br>
+                                        float  pitchDegree = pitchRad * 180 / M_PI;<br><br>
+
+                                        SERIAL_PORT.print("Roll: ");<br>
+                                        printFormattedFloat(rollDegree, 5, 2);<br><br>
+                                        
+                                        SERIAL_PORT.print("\t\tPitch: ");<br>
+                                        printFormattedFloat(pitchDegree, 5, 2);<br><br>
+                                    </code>
+                                    <center><img src="assets/video/lab3/pitchroll.gif"/></center><br>
+                                    <p>When the actual angle was 90 and -90, my test result was:<br> pitch: [83,-83], roll: [90,-84]<br>
+                                    So I scaled the original pitch value by 90/83, and used 1.0405 * Roll - 3.6416 to make the final roll value match the expected output.  
+                                    </p>
+                                    <h6 class="mb-4">2.2. Try tapping the sensor and plot the frequency response.</h6>
+                                    <p>I saved the accelerometer data through CoolTermWin software and did fft in jupyter lab.</p>
+                                    <img src="assets/video/lab3/codeTap.png"/>
+                                    <center><img src="assets/video/lab3/tapaccX.png"/><img src="assets/video/lab3/tapaccY.png"/></center>
+                                    <p>From these figures, I couldn't decide the cutoff frequency in low pass filter. So I performed FFT on the data from accelerometer when I rotated IMU.</p>
+                                    <center><img src="assets/video/lab3/normalX.png"/></center>
+                                    <p>From this frequency response plot, I think the cutoff frequency is around 10 Hz. My computer recieved 297 samples in 9.5 seconds, 
+                                        so the sampling rate is 297/9.5 = 31.2632. Given that fc = 1/(2piRC), T=1/sample_rate, alpha=T/(T+RC), I get T = 0.03198, RC = 1/(20pi), alpha = 0.6677.
+                                        Using these parameters, I am able to design a low pass filter:
+                                    </p>
+                                    <center><img src="assets/video/lab3/lpf.png"/></center>
+                                    <p>Alpha determines how much LPF trusts new signal, the higher the alpha, the more high frequency content the filtered signal has</p>
+
+                                    <h6 class="mb-4">3. Gyroscope</h6>
+                                    <h6 class="mb-4">3.1. Use the equations from class to compute pitch, roll, and yaw angles from the gyroscope.</h6>
+                                    <img src="assets/video/lab3/codegyr.png"/>
+                                    <p><br>I can monitor the values of original roll, filtered roll from accelerometer and original roll from gyroscope in Serial Plotter.</p>
+                                    <center><img src="assets/video/lab3/plotrolls.png"/></center>
+                                    <p>I can also monitor the values of original pitch, filtered pitch from accelerometer and original pitch from gyroscope in Serial Plotter.</p>
+                                    <center><img src="assets/video/lab3/plotpitchs.png"/></center>
+                                    <p><br>I found that roll and pitch from accelerometer have more high frequency content, while roll and pitch from gyroscope change more smoothly. 
+                                        The values of roll and pitch from gyroscope are related to the initial placement angle of IMU and have errors, which will accumulate over time.
+                                    </p>
+                                    <p> When I try to lower the sampling frequency, I find that the error of roll and pitch from gyroscope got larger.</p>   
+                                    
+                                     <h6 class="mb-4">3.2. Use a complimentary filter to compute an estimate of pitch and roll which is both accurate and stable. </h6>
+                                    <center><img src="assets/video/lab3/codecompli.png"/></center>
+                                     
+                                    <p>After using a complimentary filter, from the figure, we can see that the angles (in purple) have a lot less spikes, become relatively stable, and no longer have the drift effect.</p>
+                                    <center><img src="assets/video/lab3/compli.png" width="750"/></center>
+                                    <h6 class="mb-4"><br>3.3 additional task: use the equations from class to convert magnetometer data into a yaw angle.<br></h6>
+                                    <p>I used equation given in the lab description to compute yaw value from Magnetometer. Yaw value was 0 when I placed x axis of IMU towards north, and changed when I rotated it around z-axis. 
+                                        I also noticed that yaw value was robust to small changes in pitch.
+                                    </p>
+                                    <center><img src="assets/video/lab3/mgyaw.png" width="750"/></center>
+                                    
+
+
                                 </div>
-                            </div>
+                            <!-- </div> -->
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

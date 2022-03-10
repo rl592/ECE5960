@@ -108,7 +108,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/game.png" alt="..." />
+                            <img class="img-fluid" src="assets/img/portfolio/game.png"  alt="..." />
                             <h3 class=" text-center  mb-0">Lab4 : Characterize your car</h3>
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/safe.png" alt="..." />
+                            <img class="img-fluid" src="assets/img/lab5cover.png" alt="..." />
                             <h3 class=" text-center  mb-0">Lab5 : Motor driver and open loop control</h3>
 
                         </div>
@@ -846,30 +846,105 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                    <div class="modal-body text-center pb-5">
+                    <!-- <div class="modal-body  pb-5"> -->
                         <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-8">
+                            <!-- <div class="row justify-content-center"> -->
+                                <div class="col-lg-40">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Locked Safe</h2>
-                                    <!-- Icon Divider-->
-                                    <div class="divider-custom">
-                                        <div class="divider-custom-line"></div>
-                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                        <div class="divider-custom-line"></div>
-                                    </div>
-                                    <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/safe.png" alt="..." />
-                                    <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
-                                    <button class="btn btn-primary" href="#!" data-bs-dismiss="modal">
-                                        <i class="fas fa-times fa-fw"></i>
-                                        Close Window
-                                    </button>
-                                </div>
+                                    <h2 class="portfolio-modal-title text-secondary text-center text-uppercase mb-0">prelab</h2>
+                                    <p>1. What pins will you use for control on the Artemis?<br>
+                                    >I will use A0, A1 for left motor driver and A2, A3 for right motor driver.<br>
+                                    </p>
+
+                                    <p>2. We recommend powering the Artemis and the motor drivers/motors from separate batteries. Why is that?<br>
+                                        >Because the motor driver needs large current, and Artemis uses small digital signal, 
+                                        separating the two power supplies can protect the Artemis digital signal from being affected by the motor drive current.<br>
+                                    </p>
+
+                                    <h2 class="portfolio-modal-title text-secondary text-center text-uppercase mb-0">Lab Procedure</h2>
+                                    <p>1. Connect the necessary power and signal inputs to run one motor driver from the Artemis.<br>
+                                        What are reasonable settings for the power supply?<br>
+                                    </p>
+                                    <center><img src="assets/video/lab5/OperateCurrent.png" width="750"/></center>
+                                    <p>>I looked throught the datasheet of the motor driver, and found the recommended DC output current per bridge. So I set the external 
+                                        currnet supply to 1 A.
+                                    </p>
+
+                                    <p>2. Use analogWrite commands to generate PWM signals and show that you can regulate the power on the output for the motors.<br>
+                                    >I used analogWrite commands to change the duty cycle of the PWM and monitor the output of the motor drive in oscilloscope. From the oscilloscope,
+                                    I could see that the duty cycle of the PWM was changing and the PWM frequency was around 183 Hz.
+                                    </p>
+                                    <center><img src="assets/video/lab5/codeexternal.png" width="750"/></center>
+                                    <center><img src="assets/video/lab5/analogWrite.gif" width="750"/></center>
+                                    
+                                    <p>3. 4. 5.Place your car on its side, such that the spinning wheels are elevated, and show that you can run the motor in both directions.</p>
+                                    <center><img src="assets/video/lab5/oneside.gif" /></center>
+                                    <p>6. Repeat the process for the second motor and motor driver.</p> 
+                                    <center><img src="assets/video/lab5/twosides.gif" /></center>
+                                    <p>7.Install everything inside your car chassis, and try running the car on the ground. Here's how I hook up my car.</p>
+                                    <center><img src="assets/video/lab5/20220309154214.png" width="450" /></center>
+
+                                    <p>8. Explore the lower limit for which each motor still turns while on the ground.<br>
+                                        >I gradually increased the duty cycle, and at first the robot car stood still and made a vibration-like noise. When the duty cycle is
+                                         increased to 15%, the cart starts to move.
+                                    </p> 
+                                    <center><img src="assets/video/lab5/limitmove.gif" /></center>
+                                    <p>9. If your motors do not spin at the same rate, you will need to implement a calibration factor. To demonstrate that your robot can move 
+                                        in a fairly straight line, record a video of your robot following a straight line (e.g. a piece of tape) for at least 2m/6ft. 
+                                        >The robot should start centered on the tape, and still partially overlap with the tape at the end.<br>
+                                    Before calibration, The car would turn slightly to the left.
+                                    </p>
+                                    <center><img src="assets/video/lab5/wai.gif" /></center>
+                                    <p>So I scaled the output duty cycle of right motor by 0.95. Then the robot car was able to move in a straight line.</p>
+                                    <center><img src="assets/video/lab5/zhi.gif" /></center>
+
+                                    <p>10. Demonstrate open loop, untethered control of your robot - add in some turns. <br>
+                                    >I first wrote a motor_control function to control the output of the two motors. In the function, I first set the limits range of duty cycle values to 
+                                    between -255 and 255 given that the resolution of analogWrite output is 8-bit, and then controlled the left and right motors respectively. 
+                                    Forward if the input is an positive integer and vice versa.
+                                    </p>
+                                    <center><img src="assets/video/lab5/codemotorcontrol.png" /></center>
+                                    <p>In a open control loop, the robot first moves forward for 1 second by setting duty cycles of two PWM signals to 78%. Then the robot would turn left 
+                                        at a large angular speed by setting left duty cycle to -100% and the other one to 100%.  </p> 
+                                    <center><img src="assets/video/lab5/codeopenloop.png" /></center>
+                                    <center><img src="assets/video/lab5/opencontrol.gif" /></center><br>
+
+                                    <h6>Additional tasks for ECE5960 students</h6>
+                                    <p>1. Consider what frequency analogWrite generates. Is this adequately fast for these motors? Can you think of any benefits to manually configuring 
+                                        the timers to generate a faster PWM signal?<br>
+                                        >From part 2. in the oscilloscope, I could see that the duty cycle of the PWM was changing and the PWM frequency was around 183 Hz. This indicates 
+                                        that the motor control signal could change its value in 5 ms and it's much faster than the motor response time and fast enough to control the motor. 
+                                        So generating a faster PWM signal would not bring any benefits.
+                                    </p>
+
+                                    <p>2. Write a program that ramps up and down in speed slowly. Reporting the values to your computer using Bluetooth either during operation or when 
+                                        your ramp up/down procedure is over. Use this setup to document accurately what range of speeds you can achieve.<br>
+                                        >Since the maximum effective distance of ToF is 4 meters, I judged that this distance could not allow the car to complete the entire ramp up/down process, 
+                                        so I chose to set the duty cycle, from small to large, and experimented multiple times within the range of four meters.<br>
+                                      </p>
+                                    <P>I designed this experiment to send a duty cycle command from the computer through Bluetooth communication, and the car moves forward and returns ToF distance 
+                                        measurement every 300ms (according to lab2, I set the time budget of distance measurement to 140ms, so 300ms is enough for the car to obtain Distance data), the 
+                                        car stops after moving forward 4 meters; the distance sequence is derived on the computer to obtain the speed of the car.<br></P>
+                                        <center><img src="assets/video/lab5/codeA21.png" /></center>
+                                        <center><img src="assets/video/lab5/codeA22.png" /></center><br>
+                                    <p>Here are the representative plots of distance and speed given duty cycles of 23.52%, 31,37%, 39,21%, 54.90%, 70,58% and 86.27%.</p>
+                                    <center><img src="assets/video/lab5/60.png" /></center>
+                                    <center><img src="assets/video/lab5/80.png" /></center>
+                                    <center><img src="assets/video/lab5/100.png" /></center>
+                                    <center><img src="assets/video/lab5/140.png" /></center>
+                                    <center><img src="assets/video/lab5/180.png" /></center>
+                                    <center><img src="assets/video/lab5/220.png" /></center>
+                                    <p>Observing the last plot, I find that when the duty cycle is large enough, the speed of the car couldn't meet its maximum within 4 meters. So this 
+                                        limitation prevented me from estimating the full range of the speed given different duty cycles. However, I could get a approximate one as the plot
+                                        below.</p>
+                                    <center><img src="assets/video/lab5/range_speed.png" /></center>
+
+
+                                    
+                                    
                             </div>
                         </div>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>

@@ -98,7 +98,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/circus.png" alt="..." />
+                            <img class="img-fluid" src="assets/video/lab3/compli.png" alt="..." />
                             <h3 class=" text-center  mb-0">Lab3 : Sensors</h3>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/game.png"  alt="..." />
+                            <img class="img-fluid" src="assets/video/lab4/tof.jpg"  alt="..." />
                             <h3 class=" text-center  mb-0">Lab4 : Characterize your car</h3>
                         </div>
                     </div>
@@ -814,30 +814,58 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                    <div class="modal-body text-center pb-5">
+                    <!-- <div class="modal-body text-center pb-5"> -->
                         <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-8">
+                            <!-- <div class="row justify-content-center"> -->
+                                <div class="col-lg-40">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Controller</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-center text-uppercase mb-0">prelab</h2><br>
                                     <!-- Icon Divider-->
-                                    <div class="divider-custom">
-                                        <div class="divider-custom-line"></div>
-                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                        <div class="divider-custom-line"></div>
-                                    </div>
-                                    <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/game.png" alt="..." />
-                                    <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
-                                    <button class="btn btn-primary" href="#!" data-bs-dismiss="modal">
-                                        <i class="fas fa-times fa-fw"></i>
-                                        Close Window
-                                    </button>
+                                    <p>To let Artemis be powered by a battery, I replaced the black male connector from the battery with the white 2mm JST connector 
+                                        and made sure the connector was polarized correcly. And the Artmeis worked while being powered by the 600mAh battery.
+                                    </p>
+                                    <center><img src="assets/video/lab4/prelab.jpg" width="600" /></center><br>
+
+                                    <h6>(A) What are the dimensions of the car?</h6>
+                                    <p>
+                                        By measuring the car with a tape measure, I got the dimension of the car: [14.3cm 17.8cm 7.8cm].
+                                    </p>
+                                    <center><img src="assets/video/lab4/x.jpg" width="300" /></center><br>
+                                    <center><img src="assets/video/lab4/y.jpg" width="300" /></center><br>
+                                    <center><img src="assets/video/lab4/z.jpg" width="300" /></center><br>
+
+                                    <h6>(B) What is the range of speed?</h6><br>
+                                    <p>In order to estimate the range of car speed, I attached a ToF sensor on the front of the car with double-sided tape, 
+                                        which is used to measure the distance of obstacles in front of the car. </p>
+                                    <center><img src="assets/video/lab4/tof.jpg" width="500" /></center><br>
+                                    <p>And then set up the Artemis to send ToF distance measurement to the computer over Bluetooth. By doing so, I could monitor 
+                                        and store the distance data while speeding up the car with remoter. Since the speed of range is battery-dependent, 
+                                        I used a fully charged one to test. On the computer end, I set up a notification handler to store the distance data with time stamps.<br></p>
+                                    <center><img src="assets/video/lab4/handler.jpg" width="800" /></center><br>
+                                    <p>Then I positioned the car around 4 meters away from the door and speeded it up until it hit the door (pillows for cushioning).</p>
+                                    <center><img src="assets/video/lab4/distance.png" width="650" /></center><br>
+                                    <p>By taking the derivative of the distance respect to time, I got the plot of the speed of the car. In this plot, we can find that there is 
+                                        a desired acceleration and a deceleration process caused by hitting the pillowss. And we are able to estimate that the speed range is 
+                                        -3.7 to 3.7 meters per second (the car is able to move in both directions).
+                                    </p>
+                                    <center><img src="assets/video/lab4/speed.png" width="650" /></center><br>
+
+                                    <h6>(B) What is the range of acceleration?</h6><br>
+                                    <p>Since we already have the plot of the car speed, we can take advantage of it to estimate the car acceleration by 
+                                        taking its derivative. According to the plot below, I estimated that the acceleration of the car ranges from -7 m/s^2 to
+                                    7 m/s^2
+                                    </p>
+                                    <center><img src="assets/video/lab4/acceleration.png" /></center><br>
+
+
+                                                               
+
+                                    
+                                
                                 </div>
-                            </div>
+                            <!-- </div> -->
                         </div>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>

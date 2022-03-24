@@ -129,7 +129,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/submarine.png" alt="..." />
+                            <img class="img-fluid" src="assets/video/lab6/speed2m2.png" alt="..." />
                             <h3 class=" text-center  mb-0">Lab6 : PID speed control</h3>
 
                         </div>
@@ -981,30 +981,118 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                    <div class="modal-body text-center pb-5">
+                    <!-- <div class="modal-body text-center pb-5"> -->
                         <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-8">
-                                    <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Submarine</h2>
-                                    <!-- Icon Divider-->
-                                    <div class="divider-custom">
-                                        <div class="divider-custom-line"></div>
-                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                                        <div class="divider-custom-line"></div>
-                                    </div>
-                                    <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/submarine.png" alt="..." />
-                                    <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
-                                    <button class="btn btn-primary" href="#!" data-bs-dismiss="modal">
-                                        <i class="fas fa-times fa-fw"></i>
-                                        Close Window
-                                    </button>
-                                </div>
+                            <div class="col-lg-40">
+                                <h3 class="text-secondary text-center text-uppercase mb-0" >prelab</h3>
+                                <p>1. Have the robot controller to start on an input from your computer sent over Bluetooth.<br>
+                                    &emsp; I added a START command to start/pause pid computation and motor driver.
+                                </p>
+                                <center><img src="assets/video/lab6/start.png" /></center>
+                                <p>2. I added the command to send the pid parameter to tune the PID controller in real time 
+                                    without loading code again. Upon completion of the behavior, 
+                                    send the debugging data back to the computer over Bluetooth. <br></p>
+                                <center><img src="assets/video/lab6/tofreading.png" /></center>
+                                <center><img src="assets/video/lab6/gyro&yaw.png" /></center>
+                                <center><img src="assets/video/lab6/dutycycle.png" /></center>
+                                <p>3. By using the EString class, I was able to pass some useful information to 
+                                    the computer via bluetooth, such as initialization status.</p>
+                                <center><img src="assets/video/lab6/init.png" /></center><br>
+
+                                <h3 class=" text-center text-uppercase mb-0">Task A: Don’t Hit the Wall!!</h3><br>
+                                <h6>PID controller:</h6>
+                                <p>I used arduino PID library to design distance controller. I set the output limits of distance controller to -255 to 255, 
+                                    Taking front ToF reading as input and motor duty cycle as output, the negative feedback control of distance is realized.
+                                    One of the reason that I chose this library to implement PID control is that its build-in function has already taken care of Derivative kick
+                                    problem.
+                                    In addition, I also simply designed a z-axis angular acceleration PID controller with gyroscope reading as input and motor duty cycle as 
+                                    output. The output of this controller is superimposed on the duty cycle of the left and right motors, one positive and one negative, 
+                                    so as to ensure that the robot runs straight ( need to implement a calibration factor to both motor)
+                                </p>
+                                <h6>Frequency:</h6>
+                                <p>by logging all data (time stamped sensor values and motor outputs),  I calculated that the average time to execute a loop is about 323 ms</p>
+
+                                
+                                <h6>Deadband:</h6>
+                                <p>I wrote a scaling function that converts the output from your PID controller to an output for which the motors can actually react.
+                                    And I set the deacband of both motors from -30 to 30.
+                                </p> 
+                                <center><img src="assets/video/lab6/deadban.png" /></center><br>
+                                <h6>Motor drivers:</h6>
+                                <p>When I tried Task A, at first I found that the motor was very slow to respond. Later I found that when I was dealing with coasting 
+                                    and active breaking modes, I set the active breaking modes to be used when the duty cycle is 0. So when I set it to coasting modes, the problem was solved.</p>
+
+                                <h6>A reasonable range of the proportional controller gain:</h6>
+                                <p>The robot is initially placed from 2 meters to 4 meters away from the obstacle, and the target distance is 300mm. Then the maximum value of error in the initial 
+                                    state is -3700. At the same time, due to the scaling function of motors, the maximum duty cycle given is 225, then the maximum proportional gain can be calculated
+                                    as Kp = 225/3700 = 0.06. So the actual Kp value must be smaller than this value, but in the same order of magnitude. So I started tuning from 0.01.</p> 
+                                
+                                <h6>The range and sampling time for TOF sensor:</h6>
+                                <p>According to lab 3, I discovered that to make the range of ToF as large as possible, while the time budget is small. 140 ms is the timing budget which allows 
+                                    the maximum distance of 4 m to reached under long distance mdoe. Therefore I set the ToF to long distance mode and 140 ms budget time.</p>
+
+                                <h6>Parameter Tuning:</h6>
+                                <p>Because the integral part of PID Controller will always introduce overshoot, which will increase the risk of the robot hitting the wall, so I use PD control, 
+                                    Kp adjusts the response speed of the robot, and Kd suppresses overshoot. Also I found out that the initial position at different distances requires different PD parameters.
+                                    The farther the distance is, the Kp needs to be reduced accordingly, otherwise the robot will hit the wall.</p>
+
+                                <h6>2 meters:</h6>
+
+                                <p> &emsp;Kp = 0.025, Kd = 0.015,As shown in the figures below, the controller can effectively control the robot to move to the 300mm position, 
+                                    and the maximum speed in the process is 1.15 m/s</p>
+                                <center><img src="assets/video/lab6/2m1.png" /></center><br>
+                                <center><img src="assets/video/lab6/speed2m1.png" /></center><br>
+                                <center><img src="assets/video/lab6/2m1v.gif" width="450" /></center><br>
+
+                                <p> &emsp;Kp = 0.028, Kd = 0.015,As shown in the figure below, the robot drives to the 300mm position more quickly, and the maximum speed was 
+                                    also increased to 1.67 m/s, but increasing the kp significantly increased the overshoot</p>
+                                <center><img src="assets/video/lab6/2m2.png" /></center><br>
+                                <center><img src="assets/video/lab6/speed2m2.png" /></center><br>
+
+                                <h6>3 meters:</h6>
+
+                                <p> &emsp;Kp = 0.020, Kd = 0.010,As shown in the figures below, the controller can effectively control the robot to move to the 300mm position, 
+                                    and the maximum speed in the process is 1.19 m/s</p>
+                                <center><img src="assets/video/lab6/3m1.png" /></center><br>
+                                <center><img src="assets/video/lab6/speed3m1.png" /></center><br>
+
+                                <p> &emsp;Kp = 0.022, Kd = 0.012,As shown in the figure below, the robot drives to the 300mm position more quickly, and the maximum speed was 
+                                    also increased to 1.70 m/s, but increasing the kp significantly increased the overshoot</p>
+                                <center><img src="assets/video/lab6/3m2.png" /></center><br>
+                                <center><img src="assets/video/lab6/speed3m2.png" /></center><br>
+                                <center><img src="assets/video/lab6/3m1v.gif" width="450" /></center><br>
+
+                                <h6>4 meters:</h6>
+
+                                <p> &emsp;Kp = 0.022, Kd = 0.012， As shown in the figures below, the controller can effectively control the robot to move to the 300mm position, 
+                                    and the maximum speed in the process is 2.176 m/s</p>
+                                <center><img src="assets/video/lab6/4m1.png" /></center><br>
+                                <center><img src="assets/video/lab6/speed4m1.png" /></center><br>
+                                <center><img src="assets/video/lab6/4m1v.gif" width="450" /></center><br>
+
+                                <p>Through this series of parameter adjustments, I was able to design a reasonable PD controller to make the robot drive from a distance 
+                                    of 2 to 4 meters away from the wall to a position of 300mm, and I found that the maximum speed that the robot can achieve is 
+                                    largely affected by the initial The effect of position, the further away from the wall, the greater its maximum speed.</p>
+
+                                <center><img src="assets/video/lab6/table.png" /></center><br>
+                                
+
+
+
+
+                                    
+                                    
+
+
+
+                                
+
+
+
+
                             </div>
                         </div>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>

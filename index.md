@@ -141,7 +141,7 @@
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
 
-                            <img class="img-fluid" src="assets/img/portfolio/cabin.png" alt="..." />
+                            <img class="img-fluid" src="assets/video/lab7/kfsuccess1.png" alt="..." />
 
                             <h3 class=" text-center  mb-0">Lab7 : Kalman filters</h3>
                             
@@ -1075,27 +1075,85 @@
                                     largely affected by the initial The effect of position, the further away from the wall, the greater its maximum speed.</p>
 
                                 <center><img src="assets/video/lab6/table.png" /></center><br>
-                                
-
-
-
-
-                                    
-                                    
-
-
-
-                                
-
-
-
-
                             </div>
                         </div>
                     <!-- </div> -->
                 </div>
             </div>
         </div>
+ <!-- Portfolio Modal 6-->
+ <div class="portfolio-modal modal fade" id="portfolioModal7" tabindex="-1" aria-labelledby="portfolioModal7" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+            <!-- <div class="modal-body text-center pb-5"> -->
+                <div class="container">
+                    <div class="col-lg-40">
+                        <h6 class="text-secondary  text-uppercase mb-0" >1. Step Response</h6>
+                        <p>&emsp;Considering that the Kalman Filter will be combined with PID control in future experiments, I will keep the scaling function for motor output when doing the step response test.<br></p>
+                        <p>First I set the input of motor to 70 and here are the ToF readings, calculated speed and motor input.</p>
+                        <center><img src="assets/video/lab7/70.png" /></center><br>
+                        <center><img src="assets/video/lab7/70motor.png" /></center><br>
+                        <p>From the figrues above, we can have that the steady state of the speed is around 1500 mm/s. And given the motor input is 70, d = u/v = 70/1500 = 0.04667<br>
+                            Then I measured 90% rise time, it would be 784 ms or 0.784s. Therefore m = 0.01589
+                        </p>
+                        <center><img src="assets/video/lab7/ABC.png" /></center><br>
+
+  
+                        <h6 class="text-secondary  text-uppercase mb-0" >2. Kalman Filter Setup</h6>
+                        <p>First try to reason about ballpark numbers for the variance of process and measurement. And we know that their relative values determines how much you trust your model versus your sensor and
+                            the process noise is dependent onf sampling rate. I averaged the sampling rate and got 10.21 ms per sample
+                        </p>
+                        <center><img src="assets/video/lab7/nosie.png" /></center><br>
+
+                        <h6 class="text-secondary  text-uppercase mb-0" >3. Sanity Check Your Kalman Filter</h6>
+                        <p>In order to implement Kalman Filter on the computer, I define the kf function, whose input are mu at last time, sigma at last time, u(input), y(measurement), 
+                            Ad (discrete A matrix), Bd (discrete B matrix) and C matrix</p>
+                        <center><img src="assets/video/lab7/kf.png" /></center><br>
+                        <p>Loop through all of the data from my pre-recorded run, while calling this kf function.</p>
+                        <center><img src="assets/video/lab7/loop.png" /></center><br>
+                        <p>After the first run, I get the following plot. The KF estimate in the figure is almost the same as the ToF reading, indicating 
+                            that the Kalman filter trusts the results of the ToF reading very much at this time, I should increase the measurement noise Sigma_z.</p>
+                        <center><img src="assets/video/lab7/pyekf1.png" /></center><br>
+                        <p>Next I increased the measurement noise from 40 to 400. Below is the plot I get.In this figure, I found that the waveform of KF is much smoother than the previous one, 
+                            and is closer to the actual state than ToF reading (because the sampling rate is higher than the frequency of ToF data acquisition, the ToF reading curve looks a little more discrete).
+                            It shows that Kalman Filter is less confident in ToF measurement than before, and can better balance expected measurement and actual measurement.</p>
+                        <center><img src="assets/video/lab7/pyekf2.png" /></center><br>
+
+                        <h6 class="text-secondary  text-uppercase mb-0" >4. Implement the Kalman Filter on the Robot</h6>
+                        <p>First, I included the BasicLinearAlgebra library and wrote the Kalman filter function according to part 3.</p>
+                        <center><img src="assets/video/lab7/code.png" /></center><br>
+
+                        <p> In each iteration, the general loop time is within 0.005-0.03s (5-30ms). When assigning a value to Delta_t, because this value is too small and the Matrix precision is limited, 
+                            the Delta_t matrix will become 0. So I modified the library function and changed the data type of all matrices from float to double, and the problem was solved.</p>
+                        <p> Then I found that mu and Sigma both became NaN after the second iteration. It took me a long time to find out that the inversion of a 1by1 matrix in the BasicLinearAlgebra 
+                            library incorrectly returns 1. But fortunately, the inverse matrix is exactly 1by1, and I can directly divide by sigma_m when calculating Kalman Gain, instead of inverting it.</p>
+                        <p>Here is the plot of ToF reading and KF estimate. Orange: KF estimate; Blue: ToF reading.</p>
+                        <center><img src="assets/video/lab7/kfc0.1.png" /></center><br>
+                        <p>Then I found that although the KF estimate will eventually approach the ToF reading, the KF estimate will increase to around 2500 at first. 
+                            So I wondered if the value I initialized KF sigma was too large, because sigma represents the uncertainty of estimate. So I made two additional attempts, setting the sigma to a 
+                            very large value and a very small value</p>
+                        <center><img src="assets/video/lab7/kfc1000.png" /></center><br>
+                        <center><img src="assets/video/lab7/kfc0.001.png" /></center><br>
+                        <p>But the results were even worse. So it shouldn't be an initialization problem. Then I thought that Delta_T needs to be calculated for each iteration of KF, 
+                            maybe the Delta_T calculated for the first time is too large, because in the first calculation, Delta_T is calculated by the current time (acquired from the function millis())  
+                            minus the previous time acquired from the function millis() in setup function, so I did a modification: in the first KF iteration, run through all Kalman filter 
+                            calculations except updating mu and sigma just to get the previous time. The rest of the iterations remain the same. Fortunately, with such modification, the problem is solved.
+                        Here are the plots of ToF readings and KF estimate. I also zoomed in on a section where the filtering effect of the KF estimate can be better observed. </p> 
+                        <center><img src="assets/video/lab7/kfsuccess1.png" /></center><br>
+                        <center><img src="assets/video/lab7/kfsuccess2.png" /></center><br>
+
+
+
+
+
+                    </div>
+                </div>
+            <!-- </div> -->
+        </div>
+    </div>
+</div>
+
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->

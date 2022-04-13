@@ -174,7 +174,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/game.png" alt="..." />
+                            <img class="img-fluid" src="assets/video/lab10/cover.png" alt="..." />
                             <h3 class=" text-center  mb-0">Lab10 : Simulator</h3>
                         </div>
                     </div>
@@ -1153,6 +1153,55 @@
         </div>
     </div>
 </div>
+
+
+<div class="portfolio-modal modal fade" id="portfolioModal10" tabindex="-1" aria-labelledby="portfolioModal10" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+            <!-- <div class="modal-body text-center pb-5"> -->
+                <div class="container">
+                    <div class="col-lg-40">
+                        <h6 class="text-secondary  text-uppercase mb-0" >1. </h6>
+                        <p>&emsp;There are simulated robot and map in the simulator, in which the robot also displays the data of the distance sensor. We can control the linear velocity and angular velocity of the 
+                            robot with the arrow keys, and stop the robot from moving with the space key.More importantly, we can control the robot through the Commander class. We can obtain the relevant 
+                            information of the robot through get_pose, get_sensor, and realize functions such as localization. There is also the set_vel function to control the linear and angular velocity of the robot.</p>
+                        <p>&emsp;At the same time, we can use Plotter functions such as plot_odom, plot_gt, plot_bel to monitor some information such as odometry, truth pose, belief, etc. in the plotter, 
+                            so that we can verify the effectiveness of some algorithms.<br></p>
+                        
+                        <h6 class="text-secondary  text-uppercase mb-0" >2. Open Loop Control</h6>
+                        <p>&emsp;To make the robot execute a "square" loop, I make the robot go straight, then turn 90 degrees in place, and repeat four times.<br>
+                            When going straight, I set the linear velocity to 0.5 m/s and the execution time is 20 iterations in for loop; when rotating in place, I 
+                            set the angular velocity to 0.1 rad/s and the execution time is 47 iterations in for loop.</p>
+                        <center><iframe width="700" height="600" src="https://www.youtube.com/embed/D4y7Kd7Eqns" frameborder="0" allowfullscreen></iframe></center><br>
+
+                        <h6 class="text-secondary  text-uppercase mb-0" >3. Closed Loop Control</h6>
+                        <p>&emsp;(a). As long as the robot executes the program of rotation in place whenever it approaches an obstacle, no matter how many degrees it rotates, it can avoid the obstacle. 
+                            Therefore, the range of this angle is relatively broad. In my program the robot will rotate about 50 degrees.<br></p>
+                        
+                        <p>&emsp;(b). According to my attempts, in the simulation environment, no matter how fast the robot can avoid obstacles, I even tried 100 m/s and it worked well, so this may also be a defect of the simulator.<br></p>
+
+                        <p>&emsp;(c).The logic of this closed loop control is that when the data returned by the robot's distance sensor is less than a certain threshold, 
+                            the robot will back up and rotate again. So how close the robot can get to the obstacle depends on the data returned by the distance sensor and 
+                            the choice of the threshold. Since the distance sensor has noise, the threshold value needs to be set conservatively. The threshold I set is 0.3m, that is, 
+                            when the robot is less than 0.3m away from the obstacle, it will perform backward and rotate.<br></p>
+
+                        <p>&emsp;(d). Yes, my code always work. <br></p>
+
+                       
+                        <center><iframe width="700" height="600" src="https://www.youtube.com/embed/PzNeSEmX8iE" frameborder="0" allowfullscreen></iframe></center><br>
+                    </div>
+                </div>
+            <!-- </div> -->
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

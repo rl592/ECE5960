@@ -164,7 +164,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/circus.png" alt="..." />
+                            <img class="img-fluid" src="assets/video/lab9/map.png" alt="..." />
                             <h3 class=" text-center  mb-0">Lab9 : Mapping</h3>
                         </div>
                     </div>
@@ -1145,6 +1145,53 @@
 
 
 
+
+
+                    </div>
+                </div>
+            <!-- </div> -->
+        </div>
+    </div>
+</div>
+
+<div class="portfolio-modal modal fade" id="portfolioModal9" tabindex="-1" aria-labelledby="portfolioModal9" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+            <!-- <div class="modal-body text-center pb-5"> -->
+                <div class="container">
+                    <div class="col-lg-40">
+                        <h6 class="text-secondary  text-uppercase mb-0" >1. Orientation control</h6>
+                        <p>&emsp;By using Arduino PID library, I created a PID controller that allows the robot to do on-axis turns in small, accurate increments. The robot was enabled to 
+                            have 20 readings (18 degree increments) per 360 degree.</p>
+                        <center><img src="assets/video/lab9/Orientation.png" /></center><br>
+                        <p>As shown in the figure above, the yaw value acquired from IMU was tracking the value of angle_set. And it's sufficient to perform the orientation control.</p>
+                        <center><iframe width="700" height="600" src="https://www.youtube.com/embed/GWla4vXH5CI" frameborder="0" allowfullscreen></iframe></center><br>
+                        <p>In order to minimize the noise of the IMUsensor, during initialization, when the robot remains static, I record the value of the gyroscope in the z-axis a 
+                            thousand times, and take the average value as the offset. So I think my angle information is more accurate. After my many attempts, the robot rotates a circle, 
+                            and the angle measurement value will have a maximum error of 10 degrees. When the robot rotates a circle under the orientation control, it will drift. In some cases, 
+                            it will cause the robot to be 0.5 feet (0.1524 m) away from the origin. Therefore, in the worst case, there will be an error of 0.67 m, but generally this is not the case.</p>
+                        
+                        <h6 class="text-secondary  text-uppercase mb-0" >2. Read out Distances</h6>
+                        <p>&emsp;I will wait for a short while after sending a new angle command, let the robot read the ToF reading, and let the robot send back the 
+                            distance data through Bluetooth. After testing, I set the waiting time to 2.5 seconds.</p>
+                            <center><img src="assets/video/lab9/wait.png" /></center><br>
+                        <p>Sanity Check: <br>
+                            &emsp;I put the robot in a corner of my apartment. The robot obtains ToF reading under orientation control. As shown in 
+                            the picture below, the shape in the picture conforms to the shape of the corner of the wall. So the program should work.</p>
+                        <center><img src="assets/video/lab9/polar.png" /></center><br>
+                        
+                        <h6 class="text-secondary  text-uppercase mb-0" >3. Merge and Plot your readings</h6>
+                        <p>I placed the robot on five points of the lab, and executed the ToF reading under orientation control.</p>                       
+                        <center><iframe width="700" height="600" src="https://www.youtube.com/embed/knJcqjWWbHE" frameborder="0" allowfullscreen></iframe></center><br>
+                        <center><iframe width="700" height="600" src="https://www.youtube.com/embed/x9PzDSno6MA" frameborder="0" allowfullscreen></iframe></center><br>
+                        <p>By taking the IMU pose in the robot frame and using the transformation matrices, I managed to plot all of TOF sensor readings in a single plot.
+                        <center><img src="assets/video/lab9/map.png" /></center><br>
+
+
+                        <h6 class="text-secondary  text-uppercase mb-0" >4. Convert to Line-Based Map</h6>
+                        <p>&emsp;The errors in the map I got mainly exist near the two largest boxes. I corrected some points according to the position and side length of the actual boxes.</p>
+                        <center><img src="assets/video/lab9/processed map.png" /></center><br>
 
 
                     </div>

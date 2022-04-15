@@ -1185,7 +1185,7 @@
                         <p>I placed the robot on five points of the lab, and executed the ToF reading under orientation control.</p>                       
                         <center><iframe width="700" height="600" src="https://www.youtube.com/embed/knJcqjWWbHE" frameborder="0" allowfullscreen></iframe></center><br>
                         <center><iframe width="700" height="600" src="https://www.youtube.com/embed/x9PzDSno6MA" frameborder="0" allowfullscreen></iframe></center><br>
-                        <p>By taking the IMU pose in the robot frame and using the transformation matrices, I managed to plot all of TOF sensor readings in a single plot.
+                        <p>By taking the IMU pose in the robot frame and using the transformation matrices, I managed to plot all of TOF sensor readings in a single plot.</p>
                         <center><img src="assets/video/lab9/map.png" /></center><br>
 
 

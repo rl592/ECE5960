@@ -1289,6 +1289,7 @@
 
                         <p>Using the code skeleton in lab11.ipynb, the bayes filter can be fast and performed successfully.</p>
                         <center><iframe width="700" height="600" src="https://www.youtube.com/embed/6w77xu2BIQE" frameborder="0" allowfullscreen></iframe></center><br>
+                        <center><iframe width="700" height="600" src="https://www.youtube.com/embed/iTVmCAzoq5E" frameborder="0" allowfullscreen></iframe></center><br>
                         <br>
                         <center><img src="assets/video/lab11/sta.png" /></center><br>
                         <center><img src="assets/video/lab11/traj.png" /></center><br>

@@ -184,7 +184,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/safe.png" alt="..." />
+                            <img class="img-fluid" src="assets/video/lab11/cover.png" alt="..." />
                             <h3 class=" text-center mb-0">Lab11 : Localization (sim)</h3>
 
                         </div>
@@ -1220,9 +1220,12 @@
                         <p>&emsp;To make the robot execute a "square" loop, I make the robot go straight, then turn 90 degrees in place, and repeat four times.<br>
                             When going straight, I set the linear velocity to 0.5 m/s and the execution time is 20 iterations in for loop; when rotating in place, I 
                             set the angular velocity to 0.1 rad/s and the execution time is 47 iterations in for loop.</p>
+                        <center><img src="assets/video/lab10/openCode.png" /></center><br>
+                        
                         <center><iframe width="700" height="600" src="https://www.youtube.com/embed/D4y7Kd7Eqns" frameborder="0" allowfullscreen></iframe></center><br>
 
                         <h6 class="text-secondary  text-uppercase mb-0" >3. Closed Loop Control</h6>
+                        <center><img src="assets/video/lab10/closedCode.png" /></center><br>
                         <p>&emsp;(a). As long as the robot executes the program of rotation in place whenever it approaches an obstacle, no matter how many degrees it rotates, it can avoid the obstacle. 
                             Therefore, the range of this angle is relatively broad. In my program the robot will rotate about 50 degrees.<br></p>
                         
@@ -1244,7 +1247,63 @@
     </div>
 </div>
 
+<div class="portfolio-modal modal fade" id="portfolioModal11" tabindex="-1" aria-labelledby="portfolioModal11" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+            <!-- <div class="modal-body text-center pb-5"> -->
+                <div class="container">
+                    <div class="col-lg-40">
+                        <h6 class="text-secondary  text-uppercase mb-0" >1. Prediction Step</h6>
+                        <p>Odometry Motion Model<br>
+                            delta_rot_1, delta_trans and delta_rot_2 are there parameters that need be calculated for the following steps. And they are calculated
+                            according to the equations given in lectrue 18.
+                        </p>
+                        <center><img src="assets/video/lab11/code1.png" /></center><br>
+                        <p>And then use the compute_control function above twice to get the actual_u and expected_u. Combining these controls
+                            with the gaussian distribution and rot_sigma/trans_sigma, the transition probability would be calculated.
+                        </p>
+                        <center><img src="assets/video/lab11/code2.png" /></center><br>
+                        <p>With the functions above, it is sufficient to implement the prediction step by several for loops.</p>
+                        <center><img src="assets/video/lab11/code3.png" /></center><br>
+                        <center><img src="assets/video/lab11/code4.png" /></center><br>
+                        <p>However, this way of prediction step needs 1944 to the power of 1944 iterations and takes a very long time (over one minute) to finish.
+                            To simplify this step and save some time, I first loop through every belief at last time and check if its value is above
+                            a threshold. If yes, loop through the every pose at current time and add up the product of the belief at last time and the
+                            corresponding transition probability to the belief_bar at current time.
+                        </p>
+                        <center><img src="assets/video/lab11/code5.png" /></center><br>
+                        <p>And the result of this simplified prediction step is surprisingly good, and it finished within a second.</p>
 
+
+                        <h6 class="text-secondary  text-uppercase mb-0" >2. Update Step</h6>
+                        <p>The update step loops through every cell of the configuration space. And at each cell, get the actual sensor readings
+                            (self.obs_range_data) and the expected sensor readings (self.mapper.get_views(cx, cy, ca)). Assuming that 
+                            individual measurements are independent given the robot state, the likelihood of the measurements would be the product of the
+                            gaussian distributions of these measurements. And then the belief at each cell can be calculated by the likelihood of the 
+                            measurements times the belief_bar at each cell.
+                        </p>
+                        <center><img src="assets/video/lab11/code6.png" /></center><br>
+
+                        <h6 class="text-secondary  text-uppercase mb-0" >3. Simulation</h6>
+
+                        <p>Using the code skeleton in lab11.ipynb, the bayes filter can be fast and performed successfully.</p>
+                        <center><iframe width="700" height="600" src="https://www.youtube.com/embed/6w77xu2BIQE" frameborder="0" allowfullscreen></iframe></center><br>
+                        <br>
+                        <center><img src="assets/video/lab11/sta.png" /></center><br>
+                        <center><img src="assets/video/lab11/traj.png" /></center><br>
+                        <p>As shown in the table and the plot, the trajectory of the ground truth and belief are every close and this
+                            Bayes Filter only relied on the odometry information and sensor readings and is able to estimate the pose
+                            of the robot.
+                        </p>
+
+                       
+                    </div>
+                </div>
+            <!-- </div> -->
+        </div>
+    </div>
+</div>
 
 
 

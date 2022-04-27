@@ -195,7 +195,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/submarine.png" alt="..." />
+                            <img class="img-fluid" src="assets/video/lab12/cover.png " alt="..." />
                             <h3 class=" text-center  mb-0">Lab12 : Localization (real)</h3>
 
                         </div>
@@ -874,114 +874,109 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                    <!-- <div class="modal-body  pb-5"> -->
                         <div class="container">
-                            <!-- <div class="row justify-content-center"> -->
-                                <div class="col-lg-40">
-                                    <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-center text-uppercase mb-0">prelab</h2>
-                                    <p>1. What pins will you use for control on the Artemis?<br>
-                                    >I will use A0, A1 for left motor driver and A2, A3 for right motor driver.<br>
+                            <div class="col-lg-40">
+                                <!-- Portfolio Modal - Title-->
+                                <h2 class="portfolio-modal-title text-secondary text-center text-uppercase mb-0">prelab</h2>
+                                <p>1. What pins will you use for control on the Artemis?<br>
+                                >I will use A0, A1 for left motor driver and A2, A3 for right motor driver.<br>
+                                </p>
+
+                                <p>2. We recommend powering the Artemis and the motor drivers/motors from separate batteries. Why is that?<br>
+                                    >Because the motor driver needs large current, and Artemis uses small digital signal, 
+                                    separating the two power supplies can protect the Artemis digital signal from being affected by the motor drive current.<br>
+                                </p>
+
+                                <h2 class="portfolio-modal-title text-secondary text-center text-uppercase mb-0">Lab Procedure</h2>
+                                <p>1. Connect the necessary power and signal inputs to run one motor driver from the Artemis.<br>
+                                    What are reasonable settings for the power supply?<br>
+                                </p>
+                                <center><img src="assets/video/lab5/OperateCurrent.png" width="750"/></center>
+                                <p>>I looked throught the datasheet of the motor driver, and found the recommended DC output current per bridge. So I set the external 
+                                    currnet supply to 1 A.
+                                </p>
+
+                                <p>2. Use analogWrite commands to generate PWM signals and show that you can regulate the power on the output for the motors.<br>
+                                >I used analogWrite commands to change the duty cycle of the PWM and monitor the output of the motor drive in oscilloscope. From the oscilloscope,
+                                I could see that the duty cycle of the PWM was changing and the PWM frequency was around 183 Hz.
+                                </p>
+                                <center><img src="assets/video/lab5/codeexternal.png" width="750"/></center>
+                                <center><img src="assets/video/lab5/analogWrite.gif" width="750"/></center>
+                                
+                                <p>3. 4. 5.Place your car on its side, such that the spinning wheels are elevated, and show that you can run the motor in both directions.</p>
+                                <center><img src="assets/video/lab5/oneside.gif" /></center>
+                                <p>6. Repeat the process for the second motor and motor driver.</p> 
+                                <center><img src="assets/video/lab5/twosides.gif" /></center>
+                                <p>7.Install everything inside your car chassis, and try running the car on the ground. Here's how I hook up my car.</p>
+                                <center><img src="assets/video/lab5/20220309154214.png" width="450" /></center>
+
+                                <p>8. Explore the lower limit for which each motor still turns while on the ground.<br>
+                                    >I gradually increased the duty cycle, and at first the robot car stood still and made a vibration-like noise. When the duty cycle is
+                                        increased to 15%, the cart starts to move.
+                                </p> 
+                                <center><img src="assets/video/lab5/limitmove.gif" /></center>
+                                <p>9. If your motors do not spin at the same rate, you will need to implement a calibration factor. To demonstrate that your robot can move 
+                                    in a fairly straight line, record a video of your robot following a straight line (e.g. a piece of tape) for at least 2m/6ft. 
+                                    >The robot should start centered on the tape, and still partially overlap with the tape at the end.<br>
+                                Before calibration, The car would turn slightly to the left.
+                                </p>
+                                <center><img src="assets/video/lab5/wai.gif" /></center>
+                                <p>So I scaled the output duty cycle of right motor by 0.95. Then the robot car was able to move in a straight line.</p>
+                                <center><img src="assets/video/lab5/zhi.gif" /></center>
+
+                                <p>10. Demonstrate open loop, untethered control of your robot - add in some turns. <br>
+                                >I first wrote a motor_control function to control the output of the two motors. In the function, I first set the limits range of duty cycle values to 
+                                between -255 and 255 given that the resolution of analogWrite output is 8-bit, and then controlled the left and right motors respectively. 
+                                Forward if the input is an positive integer and vice versa.
+                                </p>
+                                <center><img src="assets/video/lab5/codemotorcontrol.png" /></center>
+                                <p>In a open control loop, the robot first moves forward for 1 second by setting duty cycles of two PWM signals to 78%. Then the robot would turn left 
+                                    at a large angular speed by setting left duty cycle to -100% and the other one to 100%.  </p> 
+                                <center><img src="assets/video/lab5/codeopenloop.png" /></center>
+                                <center><img src="assets/video/lab5/opencontrol.gif" /></center><br>
+
+                                <h6>Additional tasks for ECE5960 students</h6>
+                                <p>1. Consider what frequency analogWrite generates. Is this adequately fast for these motors? Can you think of any benefits to manually configuring 
+                                    the timers to generate a faster PWM signal?<br>
+                                    >From part 2. in the oscilloscope, I could see that the duty cycle of the PWM was changing and the PWM frequency was around 183 Hz. This indicates 
+                                    that the motor control signal could change its value in 5 ms and it's much faster than the motor response time and fast enough to control the motor. 
+                                    So generating a faster PWM signal would not bring any benefits.
+                                </p>
+
+                                <p>2. Write a program that ramps up and down in speed slowly. Reporting the values to your computer using Bluetooth either during operation or when 
+                                    your ramp up/down procedure is over. Use this setup to document accurately what range of speeds you can achieve.<br>
+                                    >Since the maximum effective distance of ToF is 4 meters, I judged that this distance could not allow the car to complete the entire ramp up/down process, 
+                                    so I chose to set the duty cycle, from small to large, and experimented multiple times within the range of four meters.<br>
                                     </p>
-
-                                    <p>2. We recommend powering the Artemis and the motor drivers/motors from separate batteries. Why is that?<br>
-                                        >Because the motor driver needs large current, and Artemis uses small digital signal, 
-                                        separating the two power supplies can protect the Artemis digital signal from being affected by the motor drive current.<br>
-                                    </p>
-
-                                    <h2 class="portfolio-modal-title text-secondary text-center text-uppercase mb-0">Lab Procedure</h2>
-                                    <p>1. Connect the necessary power and signal inputs to run one motor driver from the Artemis.<br>
-                                        What are reasonable settings for the power supply?<br>
-                                    </p>
-                                    <center><img src="assets/video/lab5/OperateCurrent.png" width="750"/></center>
-                                    <p>>I looked throught the datasheet of the motor driver, and found the recommended DC output current per bridge. So I set the external 
-                                        currnet supply to 1 A.
-                                    </p>
-
-                                    <p>2. Use analogWrite commands to generate PWM signals and show that you can regulate the power on the output for the motors.<br>
-                                    >I used analogWrite commands to change the duty cycle of the PWM and monitor the output of the motor drive in oscilloscope. From the oscilloscope,
-                                    I could see that the duty cycle of the PWM was changing and the PWM frequency was around 183 Hz.
-                                    </p>
-                                    <center><img src="assets/video/lab5/codeexternal.png" width="750"/></center>
-                                    <center><img src="assets/video/lab5/analogWrite.gif" width="750"/></center>
-                                    
-                                    <p>3. 4. 5.Place your car on its side, such that the spinning wheels are elevated, and show that you can run the motor in both directions.</p>
-                                    <center><img src="assets/video/lab5/oneside.gif" /></center>
-                                    <p>6. Repeat the process for the second motor and motor driver.</p> 
-                                    <center><img src="assets/video/lab5/twosides.gif" /></center>
-                                    <p>7.Install everything inside your car chassis, and try running the car on the ground. Here's how I hook up my car.</p>
-                                    <center><img src="assets/video/lab5/20220309154214.png" width="450" /></center>
-
-                                    <p>8. Explore the lower limit for which each motor still turns while on the ground.<br>
-                                        >I gradually increased the duty cycle, and at first the robot car stood still and made a vibration-like noise. When the duty cycle is
-                                         increased to 15%, the cart starts to move.
-                                    </p> 
-                                    <center><img src="assets/video/lab5/limitmove.gif" /></center>
-                                    <p>9. If your motors do not spin at the same rate, you will need to implement a calibration factor. To demonstrate that your robot can move 
-                                        in a fairly straight line, record a video of your robot following a straight line (e.g. a piece of tape) for at least 2m/6ft. 
-                                        >The robot should start centered on the tape, and still partially overlap with the tape at the end.<br>
-                                    Before calibration, The car would turn slightly to the left.
-                                    </p>
-                                    <center><img src="assets/video/lab5/wai.gif" /></center>
-                                    <p>So I scaled the output duty cycle of right motor by 0.95. Then the robot car was able to move in a straight line.</p>
-                                    <center><img src="assets/video/lab5/zhi.gif" /></center>
-
-                                    <p>10. Demonstrate open loop, untethered control of your robot - add in some turns. <br>
-                                    >I first wrote a motor_control function to control the output of the two motors. In the function, I first set the limits range of duty cycle values to 
-                                    between -255 and 255 given that the resolution of analogWrite output is 8-bit, and then controlled the left and right motors respectively. 
-                                    Forward if the input is an positive integer and vice versa.
-                                    </p>
-                                    <center><img src="assets/video/lab5/codemotorcontrol.png" /></center>
-                                    <p>In a open control loop, the robot first moves forward for 1 second by setting duty cycles of two PWM signals to 78%. Then the robot would turn left 
-                                        at a large angular speed by setting left duty cycle to -100% and the other one to 100%.  </p> 
-                                    <center><img src="assets/video/lab5/codeopenloop.png" /></center>
-                                    <center><img src="assets/video/lab5/opencontrol.gif" /></center><br>
-
-                                    <h6>Additional tasks for ECE5960 students</h6>
-                                    <p>1. Consider what frequency analogWrite generates. Is this adequately fast for these motors? Can you think of any benefits to manually configuring 
-                                        the timers to generate a faster PWM signal?<br>
-                                        >From part 2. in the oscilloscope, I could see that the duty cycle of the PWM was changing and the PWM frequency was around 183 Hz. This indicates 
-                                        that the motor control signal could change its value in 5 ms and it's much faster than the motor response time and fast enough to control the motor. 
-                                        So generating a faster PWM signal would not bring any benefits.
-                                    </p>
-
-                                    <p>2. Write a program that ramps up and down in speed slowly. Reporting the values to your computer using Bluetooth either during operation or when 
-                                        your ramp up/down procedure is over. Use this setup to document accurately what range of speeds you can achieve.<br>
-                                        >Since the maximum effective distance of ToF is 4 meters, I judged that this distance could not allow the car to complete the entire ramp up/down process, 
-                                        so I chose to set the duty cycle, from small to large, and experimented multiple times within the range of four meters.<br>
-                                      </p>
-                                    <P>I designed this experiment to send a duty cycle command from the computer through Bluetooth communication, and the car moves forward and returns ToF distance 
-                                        measurement every 300ms (according to lab2, I set the time budget of distance measurement to 140ms, so 300ms is enough for the car to obtain Distance data), the 
-                                        car stops after moving forward 4 meters; the distance sequence is derived on the computer to obtain the speed of the car.<br></P>
-                                        <center><img src="assets/video/lab5/codeA21.png" /></center>
-                                        <center><img src="assets/video/lab5/codeA22.png" /></center><br>
-                                    <p>Here are the representative plots of distance and speed given duty cycles of 23.52%, 31,37%, 39,21%, 54.90%, 70,58% and 86.27%.</p>
-                                    <center><img src="assets/video/lab5/60.png" /></center>
-                                    <center><img src="assets/video/lab5/80.png" /></center>
-                                    <center><img src="assets/video/lab5/100.png" /></center>
-                                    <center><img src="assets/video/lab5/140.png" /></center>
-                                    <center><img src="assets/video/lab5/180.png" /></center>
-                                    <center><img src="assets/video/lab5/220.png" /></center>
-                                    <p>Observing the last plot, I find that when the duty cycle is large enough, the speed of the car couldn't meet its maximum within 4 meters. So this 
-                                        limitation prevented me from estimating the full range of the speed given different duty cycles. However, I could get a approximate one as the plot
-                                        below.</p>
-                                    <center><img src="assets/video/lab5/range_speed.png" /></center>
-
-
-                                    
-                                    
+                                <P>I designed this experiment to send a duty cycle command from the computer through Bluetooth communication, and the car moves forward and returns ToF distance 
+                                    measurement every 300ms (according to lab2, I set the time budget of distance measurement to 140ms, so 300ms is enough for the car to obtain Distance data), the 
+                                    car stops after moving forward 4 meters; the distance sequence is derived on the computer to obtain the speed of the car.<br></P>
+                                    <center><img src="assets/video/lab5/codeA21.png" /></center>
+                                    <center><img src="assets/video/lab5/codeA22.png" /></center><br>
+                                <p>Here are the representative plots of distance and speed given duty cycles of 23.52%, 31,37%, 39,21%, 54.90%, 70,58% and 86.27%.</p>
+                                <center><img src="assets/video/lab5/60.png" /></center>
+                                <center><img src="assets/video/lab5/80.png" /></center>
+                                <center><img src="assets/video/lab5/100.png" /></center>
+                                <center><img src="assets/video/lab5/140.png" /></center>
+                                <center><img src="assets/video/lab5/180.png" /></center>
+                                <center><img src="assets/video/lab5/220.png" /></center>
+                                <p>Observing the last plot, I find that when the duty cycle is large enough, the speed of the car couldn't meet its maximum within 4 meters. So this 
+                                    limitation prevented me from estimating the full range of the speed given different duty cycles. However, I could get a approximate one as the plot
+                                    below.</p>
+                                <center><img src="assets/video/lab5/range_speed.png" /></center>
+ 
                             </div>
                         </div>
-                    <!-- </div> -->
+                    </div>
                 </div>
             </div>
         </div>
+
         <!-- Portfolio Modal 6-->
         <div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" aria-labelledby="portfolioModal6" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                    <!-- <div class="modal-body text-center pb-5"> -->
                         <div class="container">
                             <div class="col-lg-40">
                                 <h3 class="text-secondary text-center text-uppercase mb-0" >prelab</h3>
@@ -1077,16 +1072,16 @@
                                 <center><img src="assets/video/lab6/table.png" /></center><br>
                             </div>
                         </div>
-                    <!-- </div> -->
+                    </div>
                 </div>
             </div>
         </div>
+
  <!-- Portfolio Modal 6-->
  <div class="portfolio-modal modal fade" id="portfolioModal7" tabindex="-1" aria-labelledby="portfolioModal7" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-            <!-- <div class="modal-body text-center pb-5"> -->
                 <div class="container">
                     <div class="col-lg-40">
                         <h6 class="text-secondary  text-uppercase mb-0" >1. Step Response</h6>
@@ -1149,7 +1144,7 @@
 
                     </div>
                 </div>
-            <!-- </div> -->
+            </div>
         </div>
     </div>
 </div>
@@ -1158,7 +1153,6 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-            <!-- <div class="modal-body text-center pb-5"> -->
                 <div class="container">
                     <div class="col-lg-40">
                         <h6 class="text-secondary  text-uppercase mb-0" >1. Orientation control</h6>
@@ -1196,7 +1190,7 @@
 
                     </div>
                 </div>
-            <!-- </div> -->
+            </div>
         </div>
     </div>
 </div>
@@ -1206,7 +1200,6 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-            <!-- <div class="modal-body text-center pb-5"> -->
                 <div class="container">
                     <div class="col-lg-40">
                         <h6 class="text-secondary  text-uppercase mb-0" >1. </h6>
@@ -1242,7 +1235,7 @@
                         <center><iframe width="700" height="600" src="https://www.youtube.com/embed/PzNeSEmX8iE" frameborder="0" allowfullscreen></iframe></center><br>
                     </div>
                 </div>
-            <!-- </div> -->
+            </div>
         </div>
     </div>
 </div>
@@ -1251,7 +1244,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-            <!-- <div class="modal-body text-center pb-5"> -->
+
                 <div class="container">
                     <div class="col-lg-40">
                         <h6 class="text-secondary  text-uppercase mb-0" >1. Prediction Step</h6>
@@ -1297,16 +1290,82 @@
                             Bayes Filter only relied on the odometry information and sensor readings and is able to estimate the pose
                             of the robot.
                         </p>
-
-                       
                     </div>
                 </div>
-            <!-- </div> -->
+            </div>
         </div>
     </div>
 </div>
 
+<div class="portfolio-modal modal fade" id="portfolioModal12" tabindex="-1" aria-labelledby="portfolioModal12" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
 
+                <div class="container">
+                    <div class="col-lg-40">
+                        <h6 class="text-secondary text-center text-uppercase mb-0" >Collaboration: Lanyue Fang(lf355)</h6><br>
+                        <h6 class="text-secondary  text-uppercase mb-0" >1. Test Localization in Simulation</h6>
+                        <p>Here's the result of simulation. As shown in the figure below, the trajectory of the belief (blue) was very close to the 
+                            ground truth (green) which demonstrated that the Bayes Filter Localization worked well. 
+                        </p>
+                        <center><img src="assets/video/lab12/task1.png" /></center><br>
+
+                        <br><h6 class="text-secondary  text-uppercase mb-0" >2. Bayes Filter Localization: Update step</h6><br>
+                        <p>(a) Implement the function perform_observation_loop
+                            &emsp;In order to take advantage of the orientation control implemented by lab9, we modified 
+                            the perform_observation_loop function. To this function are added the command to send the angle 
+                            via bluetooth and the command to get the ToF data in a for loop.
+                        </p>
+                        <center><img src="assets/video/lab12/code1.png" /></center><br>
+                        <center><iframe width="700" height="600" src="https://www.youtube.com/embed/b2Gwabk3wO8" frameborder="0" allowfullscreen></iframe></center><br>
+                       
+                        <p>(b) Localization at four marker poses<br>
+                            &emsp;(1) -3 ft ,-2 ft ,0 deg (-0.9144 meter,-0.6096 meter ,0 deg)<br>
+                            &emsp;&emsp;As shown in the figure below, the belief (blue) after the update step was (-0.914, -0.610, 10), the ground truth (green) 
+                            was (-0.9144,-0.6096, 0) and the pose error was (-0.0004, 0.0004, -10).The two points of belief and ground truth are completely coincident 
+                            in the plotter, which reflects that the pose estimate is quite accurate.</p>
+                            <center><img src="assets/video/lab12/res1.png" /></center><br>
+                            <center><img src="assets/video/lab12/raw1.png" /></center><br>
+
+                            &emsp;(2) 0 ft ,3 ft ,0 deg (0 meter, 0.9144 meter ,0 deg)<br>
+                            &emsp;&emsp;As shown in the figure below, the belief (blue) after the update step was (0.000., 0.914, -10.000), the ground truth (green) 
+                            was (0, 0.9144, 0) and the pose error was (0, 0.0004, 10). The two points of belief and ground truth are completely coincident in the 
+                            plotter, which reflects that the pose estimate is quite accurate.</p>
+                            <center><img src="assets/video/lab12/res2.png" /></center><br>
+                            <center><img src="assets/video/lab12/raw2.png" /></center><br>     
+
+                            &emsp;(3) 5 ft ,-3 ft ,0 deg (1.524 meter, -0.9144 meter ,0 deg)<br>
+                            &emsp;&emsp;As shown in the figure below, the belief (blue) after the update step was (1.219, -0.914, -10.000), the ground truth (green) 
+                            was (1.524, -0.9144, 0) and the pose error was (0.305, -0.0004, 10).The pose estimate has a little error in the x direction, 
+                            but the overall result is relatively accurate.</p>
+                            <center><img src="assets/video/lab12/res3.png" /></center><br>
+                            <center><img src="assets/video/lab12/raw3.png" /></center><br>   
+
+                            &emsp;(4) 5 ft ,3 ft ,0 deg (1.524 meter,0.9144 meter ,0 deg)<br>
+                            &emsp;&emsp;As shown in the figure below, the belief (blue) after the update step was (1.829, 0.914, -10.000), the ground truth (green) 
+                            was (1.524, 0.9144, 0) and the pose error was (-0.305, 0.0004, 10). The pose estimate has a little error in the x direction, 
+                            but the overall result is relatively accurate.</p>
+                            <center><img src="assets/video/lab12/res4.png" /></center><br>
+                            <center><img src="assets/video/lab12/raw4.png" /></center><br>
+
+                        <p>(c) Discussion<br>
+                            &emsp;The estimates of Localization in the four marker poses are accurate, the first two points are almost accurate, 
+                            and the last two points have some errors in the x direction. The estimate in the all four poses has a 10 degree error in the angle. 
+                            We think the reason why the estimates of the last two poses are not as accurate as those of the first two poses may be that the latter 
+                            two poses are closer to the large box in the middle, and there is an error in the orientation control of the robot, so when approaching the 
+                            box, the rotation angle is not accurate and the error is higher. In addition, since the ToF is located at the front end of the robot, 
+                            the ToF is not collecting the exact distance from the center of the robot to the walls/obstacles, so it will cause certain errors. 
+                            But when we add 0.08 meters (the distance from the ToF to the center of the robot) to all ToF readings, the result remains the same. 
+                            Another possibility is that the actual box position is inconsistent with the box position in the map used by the precached true measurements.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

@@ -206,7 +206,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/submarine.png" alt="..." />
+                            <img class="img-fluid" src="assets/video/lab13/plots.png" alt="..." />
                             <h3 class=" text-center mb-0">Lab13 : Planning and Execution</h3>
 
                         </div>
@@ -1359,6 +1359,95 @@
                             But when we add 0.08 meters (the distance from the ToF to the center of the robot) to all ToF readings, the result remains the same. 
                             Another possibility is that the actual box position is inconsistent with the box position in the map used by the precached true measurements.
                         </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portfolio-modal modal fade" id="portfolioModal13" tabindex="-1" aria-labelledby="portfolioModal13" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+
+                <div class="container">
+                    <div class="col-lg-40">
+                        <h6 class="text-secondary text-center text-uppercase mb-0" >Collaboration: Lanyue Fang(lf355)</h6><br>
+                        <h6 class="text-secondary  text-uppercase mb-0" >1. Overall Strategy</h6>
+                        <p>Steps for the robot to move to a waypoint:<br>
+                            &emsp;(1) It first needs to find its current pose using localization.<br>
+                            &emsp;(2) Based on the current pose and goal, calculate the angle that the robot needs to turn and the distance it needs to travel.<br>
+                            &emsp;(3) Turn to the desired angle using orientation control and move forward to the desired position using distance control.<br>
+                            &emsp;(4) After the robot moves to a new position, do the localization again.  If the pose estimate is more than one tile away from the
+                            target waypoint, it would be<br>&emsp; &emsp;considered to have not arrived yet and then repeat step (1)(2)(3)(4) until the robot reaches the target waypoint.
+                            If the pose estimate is within one tile away <br>&emsp; &emsp;from the target waypoint, it would be regarded as a success of visiting the target waypoint and 
+                            the robot select a new waypoint as the next goal and repeat <br>&emsp; &emsp;step (1)(2)(3)(4) until all the waypoints are visited.<br><br>
+
+                            The capabilities required to accomplish this task:<br>
+                            &emsp;(1) Orientation control: The robot can be controlled by PID and turn to any angle which was accomplished by Lanyue Fang in Lab 8.<br>
+                            &emsp;(2) Mapping: Bayes Filter localization which was accomplished in Lab 12 by the team.<br>
+                            &emsp;(3) Distance control： Given the current ToF reading and distance that it needs to travel, the robot can first calculate 
+                            the target distance from the front wall to &emsp;itself and then use PID to control the robot to the desired position. This task was finished by Ruohan Liu in Lab 6.<br><br>
+                            The videos below are our tests for the capabilities above.
+                        </p>
+                        <center><iframe width="700" height="600" src="https://www.youtube.com/embed/b2Gwabk3wO8" frameborder="0" allowfullscreen></iframe></center><br>
+                        <center><iframe width="700" height="600" src="https://www.youtube.com/embed/MHlSr5ZQdZ8" frameborder="0" allowfullscreen></iframe></center><br>
+
+
+                        <h6 class="text-secondary  text-uppercase mb-0" >2. Implementation</h6>
+                        <center><img src="assets/video/lab13/navicode.png"  width="900" height="600"/></center><br>
+
+                        <p>The core function is shown above which enables the robot to navigate to all the waypoints in order.<br>
+                        At the first time step, we manually put the robot at one of the waypoints. So we assume the robot is aware of its 
+                        initial pose, skip the localization at the first waypoint and starts to move to the remaining waypoints. The program is
+                        designed in a while loop, every time the robot tries to navigate to the goal, it would first perform the Bayes Filter Localization
+                        by calling the function get_cur_pose() as shown below. And this function control the robot to perform observation loop and do the 
+                        update step of Bayes FIlter localization.</p>
+                        <center><img src="assets/video/lab13/getposecode.png"  width="500" height="300"/></center><br>
+                        <p> After getting the pose estimate from Bayes FIlter Localization, the robot calculates the required angle and distance to reach the goal by calling
+                            the funciton loc.compute_control() returns rotation1, translation and rotation2 as shown below. We only use rotation1, translation since the robot
+                            doesn't have the target angle at each waypoint.</p>
+                        <center><img src="assets/video/lab13/compcode.png"  width="500" height="500"/></center><br>
+
+                        <p>Having the required angle to turn and distance to travel, the robot first calls the function rotation to turn to that angle and then calls 
+                            the function translation to move.
+                        </p>
+                        <center><img src="assets/video/lab13/ro.png"   width="400" height="200"/></center><br>
+                        <center><img src="assets/video/lab13/trans.png"/></center><br>
+                        <p>This whole process works as described in Section 1. And here is the video of actual navigation and plots of robot's trajectory.</p>
+                        <center><iframe width="700" height="600" src="https://www.youtube.com/embed/-u4qHCvaJsU" frameborder="0" allowfullscreen></iframe></center><br>
+
+                        <center><img src="assets/video/lab13/plots.png" width="800"  /></center><br>
+                        <p>As shown in the figure above, the robot can perform navigation based entirely on ToF readings and IMU. 
+                            Although the robot's trajectory does not pass through all the waypoints perfectly, considering the limited 
+                            configuration space of the Bayes Filter localization, which causes a large error in the angle estimate, 
+                            and only the IMU provide odometry information, this result is still very satisfactory.</p>
+
+
+                        <h6 class="text-secondary  text-uppercase mb-0" >3. Global Path Planning</h6>
+                        <p>For global path planning, we first create a roadmap with waypoints as nodes and edges and format the roadmap into 
+                            an adjacency matrix.
+                        </p>
+                        <center><img src="assets/video/lab13/graph.png" width="700"  /></center><br>
+                        <p>Then we use Dijkstra's algorithm to find the shortest path between the current pose and the goal. 
+                            It picks the unvisited vertex with the lowest distance, calculates the distance through it to each unvisited neighbor, 
+                            and updates the neighbor's distance if smaller. Below is the Dijkstra algorithm we use.</p>
+                        <center><img src="assets/video/lab13/di.png" width="700"  /></center><br>
+                        <p>We put the robot at the node 8, and try to use the roadmap and Dijkstra's algorithm to find a path towards node 6.<br>
+                        Then we feed the adjacency matrix of the roadmap to Dijkstra's algorithm and choose the node 6 as the destination. And we get the index of
+                        of the waypoints in the shortest path generated by Dijkstra.
+                        </p>
+                        <center><img src="assets/video/lab13/codewp.png" width="700"  /></center><br>
+
+                        <p>And the path can be visualized in the figure below.</p>
+                        <center><img src="assets/video/lab13/wyp.png" width="700"  /></center><br>
+                        <p>Next, with the waypoints generated by the global planner, we can send the them to the navigation funciton in Section 2 and test.
+                            Below is the video of our test.</p>
+
+                        <center><iframe width="700" height="600" src="https://www.youtube.com/embed/5a6RMm9HK7Y" frameborder="0" allowfullscreen></iframe></center><br>
+                        <p>As shown in the video, the robot can find a path from the current pose to the other waypoint around the box. </p>
 
                     </div>
                 </div>
